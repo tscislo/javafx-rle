@@ -5,7 +5,7 @@ import java.util.regex.Pattern;
 
 public class RunLengthEncoder {
 
-    public static String separator = ";";
+    public static String separator = ",";
 
     public static String encode(String in) throws InvalidInputException {
         if (in == null || in.equals("")) {
@@ -45,21 +45,23 @@ public class RunLengthEncoder {
         String out = "";
 
         for (String s : splitted) {
-            char character = s.charAt(0);
-            Integer count = 0;
-            Pattern pattern = Pattern.compile("[^\\d](\\d+)");
-            Matcher matcher = pattern.matcher(s);
-            if (matcher.matches()) {
-                count = Integer.parseInt(matcher.group(1));
-            } else {
-                throw new InvalidInputException("Niepoprawne dane do odkodowania!");
-            }
-            for (int i = 0; i < count; i++) {
-                out += "" + character;
+            if (s.length() > 0) {
+                char character = s.charAt(0);
+                int count = 0;
+                Pattern pattern = Pattern.compile("[^\\d](\\d+)");
+                Matcher matcher = pattern.matcher(s);
+                if (matcher.matches()) {
+                    count = Integer.parseInt(matcher.group(1));
+                } else {
+                    throw new InvalidInputException("Niepoprawne dane do odkodowania!");
+                }
+                for (int i = 0; i < count; i++) {
+                    out += "" + character;
+                }
             }
         }
 
-        if(out.equals("")) {
+        if (out.equals("")) {
             throw new InvalidInputException("Niepoprawne dane do odkodowania!");
         }
 
