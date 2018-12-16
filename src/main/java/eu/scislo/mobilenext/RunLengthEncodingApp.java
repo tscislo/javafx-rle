@@ -7,6 +7,7 @@ import javafx.scene.control.*;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
+import jfxtras.scene.control.ToggleGroupValue;
 
 public class RunLengthEncodingApp extends Application {
 
@@ -52,7 +53,7 @@ public class RunLengthEncodingApp extends Application {
 
         BorderPane rootPane = new BorderPane();
         Scene scene = new Scene(rootPane, 450, 200);
-        scene.getStylesheets().add(getClass().getResource("application.css").toExternalForm());
+        scene.getStylesheets().add(getClass().getResource("../../../application.css").toExternalForm());
         primaryStage.setTitle("Run Length Encoding");
         primaryStage.setScene(scene);
 
