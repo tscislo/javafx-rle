@@ -10,8 +10,6 @@ import javafx.stage.Stage;
 
 public class RunLengthEncodingApp extends Application {
 
-    private Mode mode = Mode.CODE;
-
     private Label sourceLabel = new Label("Źródło: ");
     private TextField source = new TextField();
     private Label resultLabel = new Label("Wynik operacji: ");
@@ -23,24 +21,25 @@ public class RunLengthEncodingApp extends Application {
     private Label operationLabel = new Label("Operacja: ");
     private RadioButton code = new RadioButton("kodowanie");
     private RadioButton decode = new RadioButton("dekodowanie");
-    private ToggleGroup operation = new ToggleGroup();
+    private ToggleGroupValue<Mode> operation = new ToggleGroupValue<>();
 
     private ViewModel viewModel = new ViewModel();
 
     @Override
     public void start(Stage primaryStage) throws Exception {
 
-        viewModel.setSource(">>JJJAAVAA<<");
+        // bidirectional bindings
         source.textProperty().bindBidirectional(viewModel.sourceProperty());
         result.textProperty().bindBidirectional(viewModel.resultProperty());
-
+        operation.valueProperty().bindBidirectional(viewModel.modeProperty());
 
         source.setPrefWidth(250);
         code.setToggleGroup(operation);
         code.setUserData(Mode.CODE);
         decode.setToggleGroup(operation);
         decode.setUserData(Mode.DECODE);
-        setMode();
+
+        initialize();
 
         VBox rightVBox = new VBox();
         rightVBox.getStyleClass().add("right-pane");
@@ -61,23 +60,15 @@ public class RunLengthEncodingApp extends Application {
         rootPane.setRight(rightVBox);
         rootPane.setLeft(leftVBox);
 
-        // event handlers
-        operation.selectedToggleProperty().addListener((observable) -> mode = (Mode) operation.getSelectedToggle().getUserData());
+        // button event handlers
         execute.setOnAction(event -> onExecute());
         copy.setOnAction(event -> onCopy());
 
     }
 
-    private void setMode() {
-        if (mode == Mode.CODE) {
-            code.setSelected(true);
-        } else {
-            decode.setSelected(true);
-        }
-    }
 
     private void onExecute() {
-        if (mode == Mode.CODE) {
+        if (viewModel.getMode() == Mode.CODE) {
             try {
                 viewModel.setResult(RunLengthEncoder.encode(viewModel.getSource()));
             } catch (InvalidInputException e) {
@@ -97,8 +88,15 @@ public class RunLengthEncodingApp extends Application {
     private void onCopy() {
         viewModel.setSource(viewModel.getResult());
         viewModel.setResult("");
-        mode = (mode == Mode.CODE) ? Mode.DECODE : Mode.CODE;
-        setMode();
+        viewModel.modeEnumToggle();
+    }
+
+    /**
+     * Initialization
+     */
+    private void initialize() {
+        viewModel.setSource(">>JJJAAVAA<<");
+        viewModel.setMode(Mode.CODE);
     }
 
 
