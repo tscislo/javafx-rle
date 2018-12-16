@@ -13,7 +13,7 @@ public class RunLengthEncodingApp extends Application {
     private Mode mode = Mode.CODE;
 
     private Label sourceLabel = new Label("Źródło: ");
-    private TextField source = new TextField(">>JJJAAAAVAA<<");
+    private TextField source = new TextField();
     private Label resultLabel = new Label("Wynik operacji: ");
     private TextField result = new TextField();
 
@@ -25,8 +25,16 @@ public class RunLengthEncodingApp extends Application {
     private RadioButton decode = new RadioButton("dekodowanie");
     private ToggleGroup operation = new ToggleGroup();
 
+    private ViewModel viewModel = new ViewModel();
+
     @Override
     public void start(Stage primaryStage) throws Exception {
+
+        viewModel.setSource(">>JJJAAVAA<<");
+        source.textProperty().bindBidirectional(viewModel.sourceProperty());
+        result.textProperty().bindBidirectional(viewModel.resultProperty());
+
+
         source.setPrefWidth(250);
         code.setToggleGroup(operation);
         code.setUserData(Mode.CODE);
@@ -71,14 +79,14 @@ public class RunLengthEncodingApp extends Application {
     private void onExecute() {
         if (mode == Mode.CODE) {
             try {
-                result.setText(RunLengthEncoder.encode(source.getText()));
+                viewModel.setResult(RunLengthEncoder.encode(viewModel.getSource()));
             } catch (InvalidInputException e) {
                 Alert alert = new Alert(Alert.AlertType.WARNING, e.getMessage());
                 alert.showAndWait();
             }
         } else {
             try {
-                result.setText(RunLengthEncoder.decode(source.getText()));
+                viewModel.setResult(RunLengthEncoder.decode(viewModel.getSource()));
             } catch (InvalidInputException e) {
                 Alert alert = new Alert(Alert.AlertType.WARNING, e.getMessage());
                 alert.showAndWait();
@@ -87,8 +95,8 @@ public class RunLengthEncodingApp extends Application {
     }
 
     private void onCopy() {
-        source.setText(result.getText());
-        result.clear();
+        viewModel.setSource(viewModel.getResult());
+        viewModel.setResult("");
         mode = (mode == Mode.CODE) ? Mode.DECODE : Mode.CODE;
         setMode();
     }
