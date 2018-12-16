@@ -53,7 +53,7 @@ public class RunLengthEncodingApp extends Application {
 
         BorderPane rootPane = new BorderPane();
         Scene scene = new Scene(rootPane, 450, 200);
-        scene.getStylesheets().add(getClass().getResource("../../../application.css").toExternalForm());
+        scene.getStylesheets().add("application.css");
         primaryStage.setTitle("Run Length Encoding");
         primaryStage.setScene(scene);
 

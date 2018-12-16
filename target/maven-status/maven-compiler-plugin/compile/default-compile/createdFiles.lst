@@ -1,0 +1,5 @@
+eu/scislo/mobilenext/Mode.class
+eu/scislo/mobilenext/RunLengthEncodingApp.class
+eu/scislo/mobilenext/InvalidInputException.class
+eu/scislo/mobilenext/ViewModel.class
+eu/scislo/mobilenext/RunLengthEncoder.class
